@@ -38,12 +38,18 @@ public class UserService {
         user.setPhone(userReq.getPhone());
         user.setEmail(userReq.getEmail());
         user.setDateOfBirth(userReq.getDateOfBirth());
-        user.setSex(userReq.getSex());
+        user.setGender(userReq.getGender());
         user.setAddress(userReq.getAddress());
         user.setStatus(1);
         user.setEnabled(true);
         return userRepository.save(user);
     }
+
+    public User getUserById(Long id) {
+        // Tìm người dùng theo ID
+        return userRepository.getById(id);
+    }
+
 
     public User updateUser( Long id, UserReq userReq) {
         // Kiểm tra xem người dùng có tồn tại không
@@ -57,11 +63,10 @@ public class UserService {
         user.setPhone(userReq.getPhone());
         user.setEmail(userReq.getEmail());
         user.setDateOfBirth(userReq.getDateOfBirth());
-        user.setSex(userReq.getSex());
-        user.setAddress(userReq.getAddress());
-        user.setStatus(userReq.getStatus());
-        user.setEnabled(userReq.isEnabled());
+        user.setGender(userReq.getGender());
+
         return userRepository.save(user);
     }
+
 
 }

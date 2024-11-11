@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,8 @@ public class AuthUser {
     @Autowired
     private UserService service;
 
-
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {
@@ -39,14 +41,15 @@ public class AuthUser {
         // Nếu xác thực thành công, phát sinh mã JWT và trả về cho người dùng
         User user = service.login(loginRequest.getUsername());
         if (user == null){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("errorMessage");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Khong tim thay tai khoan!");
 
         }
-        if (!user.getAccount().getPassword().equals(loginRequest.getPassword())){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("errorMessage 1");
+        // So sánh mật khẩu đã nhập với mật khẩu đã mã hóa
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getAccount().getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai mat khau!");
         }
         if(user.getStatus() != 1){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("errorMessage 2");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tai khoan khong kha dung!");
         }
 
         token = jwtTokenUtil.generateToken(loginRequest.getUsername());

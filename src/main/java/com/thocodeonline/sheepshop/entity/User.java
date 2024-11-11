@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -23,10 +24,10 @@ public class User {
     private String phone;
     private String email;
     private Date dateOfBirth;
-    private Integer sex;
+    private Integer gender;
     private String address;
     private Integer status;
-
+    private String image;
     private boolean enabled;
 
     @ManyToOne

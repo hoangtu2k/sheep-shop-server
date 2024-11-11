@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/admin/user")
+@RequestMapping("/admin/users")
 public class UserRest {
 
     @Autowired
@@ -34,7 +34,7 @@ public class UserRest {
                     userReq.setPhone(user.getPhone());
                     userReq.setEmail(user.getEmail());
                     userReq.setDateOfBirth(user.getDateOfBirth());
-                    userReq.setSex(user.getSex());
+                    userReq.setGender(user.getGender());
                     userReq.setAddress(user.getAddress());
                     userReq.setStatus(user.getStatus());
                     userReq.setEnabled(user.isEnabled());
@@ -59,6 +59,18 @@ public class UserRest {
         return ResponseEntity.ok(userReqs); // Trả về 200 và danh sách người dùng
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        User user = userService.getUserById(id); // Giả sử trả về người dùng theo ID
+
+        if (user != null) {
+            // Nếu tìm thấy người dùng, trả về HttpStatus 200 (OK) và thông tin người dùng
+            return ResponseEntity.ok(user);
+        } else {
+            // Nếu không tìm thấy, trả về HttpStatus 404 (Not Found)
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping()
     public ResponseEntity<User> createUser(@RequestBody UserReq userReq) {

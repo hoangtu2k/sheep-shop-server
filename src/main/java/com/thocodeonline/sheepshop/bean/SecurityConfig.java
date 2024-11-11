@@ -17,13 +17,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Tắt CSRF protection vì đây là API REST
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/public/**").permitAll() // Bỏ qua bảo mật cho các endpoint công khai
-                        .anyRequest().authenticated() // Yêu cầu xác thực cho các yêu cầu khác
-                )
-                .httpBasic(); // Sử dụng xác thực cơ bản
-
+                .csrf().disable() // Tắt CSRF protection
+                .authorizeRequests(authorize -> authorize
+                        .anyRequest().permitAll() // Bỏ qua bảo mật cho tất cả các yêu cầu
+                );
         return http.build();
     }
 }

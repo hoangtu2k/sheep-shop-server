@@ -2,15 +2,17 @@ package com.thocodeonline.sheepshop.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class Account {
 
@@ -23,7 +25,10 @@ public class Account {
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    @JsonBackReference
     private Role role;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    private Set<User> users = new HashSet<User>();
 
 }

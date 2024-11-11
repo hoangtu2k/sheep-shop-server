@@ -22,5 +22,6 @@ public class UserReq {
     private boolean enabled;
     private String roleName;
     private String username;
+    private Long accountId;
 
 }

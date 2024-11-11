@@ -94,5 +94,10 @@ public class UserRest {
         return ResponseEntity.ok(updatedUser); // Trả về 200 OK và đối tượng UserReq đã cập nhật
     }
 
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable Long id) {
+        User deleteUser = userService.deleteUser(id);
+        return ResponseEntity.ok(deleteUser); // Trả về 200 OK và đối tượng UserReq đã cập nhật
+    }
 
 }

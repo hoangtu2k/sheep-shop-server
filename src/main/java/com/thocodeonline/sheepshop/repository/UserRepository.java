@@ -20,10 +20,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select u from User u")
     List<User> getAllUser();
 
-    @Query(value = "select u from User u where u.enabled = true ")
-    List<User> getAllUserActive();
-
-    @Query(value = "select u from User u where u.enabled = false")
-    List<User> getAllUserNotActive();
 
 }

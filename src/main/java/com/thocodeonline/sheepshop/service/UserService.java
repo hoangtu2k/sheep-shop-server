@@ -28,14 +28,6 @@ public class UserService {
         return userRepository.getAllUser();
     }
 
-    public List<User> getAllUserActive() {
-        return userRepository.getAllUserActive();
-    }
-
-    public List<User> getAllUserNotActive() {
-        return userRepository.getAllUserNotActive();
-    }
-
     public User createUser(UserReq userReq) {
         User user = new User();
         if (userReq.getCode() == null) {
@@ -52,6 +44,12 @@ public class UserService {
         user.setDateOfBirth(userReq.getDateOfBirth());
         user.setGender(userReq.getGender());
 
+        if (userReq.getImage() != null) {
+            user.setImage(userReq.getImage());
+        } else {
+            user.setImage(null);
+        }
+        
         if (userReq.getAccountId() != null) {
              user.setAccount(Account.builder().id(userReq.getAccountId()).build());
         } else {
@@ -106,6 +104,8 @@ public class UserService {
         user.setEmail(userReq.getEmail());
         user.setDateOfBirth(userReq.getDateOfBirth());
         user.setGender(userReq.getGender());
+
+        user.setImage(userReq.getImage());
 
         // Check the accountId provided in the request
         Long accountId = userReq.getAccountId();

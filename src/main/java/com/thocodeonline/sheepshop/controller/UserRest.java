@@ -35,9 +35,9 @@ public class UserRest {
                     userReq.setEmail(user.getEmail());
                     userReq.setDateOfBirth(user.getDateOfBirth());
                     userReq.setGender(user.getGender());
-                    userReq.setAddress(user.getAddress());
                     userReq.setStatus(user.getStatus());
                     userReq.setEnabled(user.isEnabled());
+                    userReq.setImage(user.getImage());
 
                     // Kiểm tra xem tài khoản và vai trò có tồn tại không
                     if (user.getAccount() != null && user.getAccount().getRole() != null) {

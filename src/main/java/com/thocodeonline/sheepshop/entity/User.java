@@ -1,9 +1,8 @@
 package com.thocodeonline.sheepshop.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+
 
 import java.util.Date;
 

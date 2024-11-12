@@ -17,8 +17,8 @@ public class UserReq {
     private String email;
     private Date dateOfBirth;
     private Integer gender;
-    private String address;
     private Integer status;
+    private String image;
     private boolean enabled;
     private String roleName;
     private String username;

@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select u from User u WHERE u.id = :id")
     User getById(@Param("id") Long id);
 
-    @Query(value = "select u from User u WHERE u.status = 1")
+    @Query(value = "select u from User u")
     List<User> getAllUser();
 
     @Query(value = "select u from User u where u.enabled = true ")

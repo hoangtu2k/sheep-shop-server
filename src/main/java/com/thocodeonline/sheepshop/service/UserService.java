@@ -38,13 +38,26 @@ public class UserService {
 
     public User createUser(UserReq userReq) {
         User user = new User();
-        user.setCode(userReq.getCode());
+        if (userReq.getCode() == null) {
+            // Generate a new code automatically if it's null
+            String generatedCode = generateUserCode();
+            user.setCode(generatedCode);
+        } else {
+            // Otherwise, set the code from the request
+            user.setCode(userReq.getCode());
+        }
         user.setName(userReq.getName());
         user.setPhone(userReq.getPhone());
         user.setEmail(userReq.getEmail());
         user.setDateOfBirth(userReq.getDateOfBirth());
         user.setGender(userReq.getGender());
-        user.setAddress(userReq.getAddress());
+
+        if (userReq.getAccountId() != null) {
+             user.setAccount(Account.builder().id(userReq.getAccountId()).build());
+        } else {
+            user.setAccount(null);
+        }
+
         user.setStatus(1);
         user.setEnabled(true);
         return userRepository.save(user);

@@ -1,9 +1,6 @@
 package com.thocodeonline.sheepshop.service;
 
-import com.thocodeonline.sheepshop.entity.Brand;
-import com.thocodeonline.sheepshop.entity.Category;
-import com.thocodeonline.sheepshop.entity.Product;
-import com.thocodeonline.sheepshop.entity.ProductPhoto;
+import com.thocodeonline.sheepshop.entity.*;
 import com.thocodeonline.sheepshop.repository.ProductPhotoRepository;
 import com.thocodeonline.sheepshop.repository.ProductRepository;
 import com.thocodeonline.sheepshop.request.ProductReq;
@@ -11,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,8 +17,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private ProductPhotoService productPhotoService;
+
     @Autowired
     private ProductPhotoRepository productPhotoRepository;
 
@@ -30,6 +27,14 @@ public class ProductService {
 
     public Product getProductById(Long id) {
         return productRepository.getById(id);
+    }
+
+    public ProductPhoto createProductPhoto(ProductReq image){
+        ProductPhoto productImage = new ProductPhoto();
+        productImage.setImageUrl(image.getImageUrl());
+        productImage.setMainImage(image.getMainImage());
+        productImage.setProduct(Product.builder().id(image.getProductId()).build());
+        return productPhotoRepository.save(productImage);
     }
 
     public Product createProduct(ProductReq productReq) {
@@ -68,12 +73,42 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public ProductPhoto createProductPhoto(ProductReq image){
-        ProductPhoto productImage = new ProductPhoto();
-        productImage.setImageUrl(image.getImageUrl());
-        productImage.setMainImage(image.getMainImage());
-        productImage.setProduct(Product.builder().id(image.getProductId()).build());
-        return productPhotoRepository.save(productImage);
+
+    public Product updateProduct(Long id, ProductReq productReq) {
+        // Kiểm tra xem người dùng có tồn tại không
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (!optionalProduct.isPresent()) {
+            throw new RuntimeException("Product not found with id: " + id);
+        }
+        Product product = optionalProduct.get();
+        if (productReq.getCode() == null) {
+            // Generate a new code automatically if it's null
+            String generatedCode = generateUserCode();
+            product.setCode(generatedCode);
+        } else {
+            // Otherwise, set the code from the request
+            product.setCode(productReq.getCode());
+        }
+        product.setBarcode(productReq.getBarcode());
+        product.setName(productReq.getName());
+        product.setWeight(productReq.getWeight());
+        product.setPrice(productReq.getPrice());
+
+        // Set category
+        if (productReq.getCategoryId() != null) {
+            product.setCategory(Category.builder().id(productReq.getCategoryId()).build());
+        } else {
+            product.setCategory(null);
+        }
+
+        // Set brand
+        if (productReq.getBrandId() != null) {
+            product.setBrand(Brand.builder().id(productReq.getBrandId()).build());
+        } else {
+            product.setBrand(null);
+        }
+
+        return productRepository.save(product);
     }
 
     private String generateUserCode() {

@@ -27,7 +27,7 @@ public class ProductRest {
         List<ProductReq> productReqs = products.stream()
                 .map(product -> {
                     ProductReq productReq = new ProductReq();
-
+                    productReq.setId(product.getId());
                     productReq.setCode(product.getCode());
                     productReq.setBarcode(product.getBarcode());
                     productReq.setName(product.getName());
@@ -36,12 +36,21 @@ public class ProductRest {
                     productReq.setStatus(product.getStatus());
 
                     // Kiểm tra xem dữ liệu có tồn tại không
-                    if (product.getCategory() != null && product.getBrand() != null) {
-                        productReq.setBrandName(product.getBrand().getName());
+                    if (product.getCategory() != null) {
+                        productReq.setCategoryId(product.getCategory().getId());
                         productReq.setCategoryName(product.getCategory().getName());
                     } else {
-                        productReq.setBrandName(null);
+                        productReq.setCategoryId(null);
                         productReq.setCategoryName(null);
+                    }
+
+                    // Kiểm tra xem dữ liệu có tồn tại không
+                    if ( product.getBrand() != null) {
+                        productReq.setBrandId(product.getBrand().getId());
+                        productReq.setBrandName(product.getBrand().getName());
+                    } else {
+                        productReq.setBrandId(null);
+                        productReq.setBrandName(null);
                     }
 
                     return productReq; // Trả về đối tượng UserReq đã tạo
@@ -79,6 +88,12 @@ public class ProductRest {
             // Xử lý lỗi phù hợp (có thể ghi log hoặc trả về thông báo cụ thể hơn)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductReq productReq) {
+        Product updateProduct = productService.updateProduct(id, productReq);
+        return ResponseEntity.ok(updateProduct); // Trả về 200 OK và đối tượng UserReq đã cập nhật
     }
 
 }

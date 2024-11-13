@@ -33,7 +33,7 @@ public class ProductRest {
                     productReq.setName(product.getName());
                     productReq.setPrice(product.getPrice());
                     productReq.setDescription(product.getDescription());
-
+                    productReq.setStatus(product.getStatus());
 
                     // Kiểm tra xem dữ liệu có tồn tại không
                     if (product.getCategory() != null && product.getBrand() != null) {

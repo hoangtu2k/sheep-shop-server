@@ -14,7 +14,7 @@ public class ProductPhoto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private boolean mainImage;
+    private Boolean mainImage;
     private String imageUrl;
 
     @ManyToOne

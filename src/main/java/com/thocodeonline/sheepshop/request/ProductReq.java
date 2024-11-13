@@ -5,7 +5,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Setter @Getter
+@Setter
+@Getter
 public class ProductReq {
     private Long id;
     private String code;
@@ -15,9 +16,12 @@ public class ProductReq {
     private Double weight;
     private String description;
     private BigDecimal price;
-    private Integer status;
     private Long categoryId;
     private Long brandId;
     private String categoryName;
     private String brandName;
+    private Integer status;
+    private Boolean mainImage;
+    private String imageUrl;
+    private Long productId;
 }

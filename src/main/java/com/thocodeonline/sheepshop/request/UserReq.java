@@ -1,8 +1,6 @@
 package com.thocodeonline.sheepshop.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -23,5 +21,4 @@ public class UserReq {
     private String roleName;
     private String username;
     private Long accountId;
-
 }

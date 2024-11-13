@@ -19,7 +19,7 @@ public class Category {
     private Long id;
     private String name;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<Product>();
 

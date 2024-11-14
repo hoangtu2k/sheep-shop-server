@@ -3,6 +3,7 @@ package com.thocodeonline.sheepshop.service;
 import com.thocodeonline.sheepshop.entity.Product;
 import com.thocodeonline.sheepshop.entity.ProductPhoto;
 import com.thocodeonline.sheepshop.repository.ProductPhotoRepository;
+import com.thocodeonline.sheepshop.repository.ProductRepository;
 import com.thocodeonline.sheepshop.request.ProductReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public class ProductPhotoService {
 
     @Autowired
     private ProductPhotoRepository productPhotoRepository;
+
+    private ProductRepository productRepository;
 
     public List<ProductPhoto> getAllProductPhoto() {
         return productPhotoRepository.getAllProductPhoto();
@@ -36,5 +39,18 @@ public class ProductPhotoService {
     }
 
 
+    public void deleteImg(Integer IdProduct){
+        List<ProductPhoto> list = productPhotoRepository.getAllByIdSP(IdProduct);
+        for(ProductPhoto p : list){
+            productPhotoRepository.delete(p);
+        }
+    }
+
+    public void delete1(Integer IdProduct){
+        List<ProductPhoto> list = productPhotoRepository.getAllByIdSP1(IdProduct);
+        for(ProductPhoto p : list){
+            productPhotoRepository.delete(p);
+        }
+    }
 
 }

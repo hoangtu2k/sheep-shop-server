@@ -17,6 +17,7 @@ public class ProductPhoto {
     private Boolean mainImage;
     private String imageUrl;
 
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

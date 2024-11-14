@@ -36,6 +36,7 @@ public class ProductRest {
                     productReq.setPrice(product.getPrice());
                     productReq.setDescription(product.getDescription());
                     productReq.setStatus(product.getStatus());
+                    productReq.setWeight(product.getWeight());
 
                     // Set category details if available
                     if (product.getCategory() != null) {

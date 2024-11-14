@@ -29,7 +29,7 @@ public class User {
     private String address;
     private Integer status;
     private String image;
-    private boolean enabled;
+
 
     @ManyToOne
     @JoinColumn(name = "account_id")

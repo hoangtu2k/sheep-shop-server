@@ -35,7 +35,7 @@ public class UserRest {
                     userReq.setDateOfBirth(user.getDateOfBirth());
                     userReq.setGender(user.getGender());
                     userReq.setStatus(user.getStatus());
-                    userReq.setEnabled(user.isEnabled());
+
                     userReq.setImage(user.getImage());
 
                     // Kiểm tra xem tài khoản và vai trò có tồn tại không

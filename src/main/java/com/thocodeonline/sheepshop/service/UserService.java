@@ -54,7 +54,7 @@ public class UserService {
         }
 
         user.setStatus(1);
-        user.setEnabled(true);
+
         return userRepository.save(user);
     }
 

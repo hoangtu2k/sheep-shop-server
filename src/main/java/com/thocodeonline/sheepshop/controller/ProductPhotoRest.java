@@ -1,9 +1,10 @@
 package com.thocodeonline.sheepshop.controller;
 
+import com.thocodeonline.sheepshop.entity.ProductPhoto;
 import com.thocodeonline.sheepshop.request.ProductReq;
 import com.thocodeonline.sheepshop.service.ProductPhotoService;
-import com.thocodeonline.sheepshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,16 @@ public class ProductPhotoRest {
         return ResponseEntity.ok(service.createProductPhoto(image));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id){
+        service.deleteImg(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 
-
+    @DeleteMapping("/1/{id}")
+    public ResponseEntity<?> delete1(@PathVariable("id") Integer id){
+        service.delete1(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 
 }

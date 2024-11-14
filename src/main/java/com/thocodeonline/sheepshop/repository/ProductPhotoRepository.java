@@ -18,5 +18,9 @@ public interface ProductPhotoRepository extends JpaRepository<ProductPhoto, Long
     List<ProductPhoto> getAllProductPhoto();
 
 
+    @Query(value = "Select e from ProductPhoto  e where e.product.id = :id and e.mainImage = true")
+    List<ProductPhoto> getAllByIdSP(@Param("id") Integer id);
+    @Query(value = "Select e from ProductPhoto  e where e.product.id = :id and e.mainImage = false ")
+    List<ProductPhoto> getAllByIdSP1(@Param("id") Integer id);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class ProductPhotoService {
 
@@ -18,7 +19,12 @@ public class ProductPhotoService {
     }
 
     public ProductPhoto getProductPhotoById(Long id) {
+        // Kiểm tra xem productPhoto có tồn tại không
+        ProductPhoto productPhoto = productPhotoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
         return productPhotoRepository.getById(id);
     }
+
+
 
 }

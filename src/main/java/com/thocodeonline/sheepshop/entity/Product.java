@@ -36,7 +36,7 @@ public class Product {
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
-    @JsonIgnore
+    
     @OneToMany(mappedBy = "product")
     private Set<ProductPhoto> productPhotos = new HashSet<ProductPhoto>();
 

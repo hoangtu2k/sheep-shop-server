@@ -1,6 +1,7 @@
 package com.thocodeonline.sheepshop.controller;
 
 import com.thocodeonline.sheepshop.entity.Product;
+import com.thocodeonline.sheepshop.entity.ProductPhoto;
 import com.thocodeonline.sheepshop.request.ProductReq;
 import com.thocodeonline.sheepshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +22,10 @@ public class ProductRest {
 
     @GetMapping()
     public ResponseEntity<List<ProductReq>> getAll() {
-        // Lấy danh sách User từ service
+        // Retrieve the list of products from the service
         List<Product> products = productService.getAllProduct();
 
-        // Chuyển đổi danh sách User sang danh sách UserReq trực tiếp
+        // Convert the list of Product to ProductReq
         List<ProductReq> productReqs = products.stream()
                 .map(product -> {
                     ProductReq productReq = new ProductReq();
@@ -35,7 +37,7 @@ public class ProductRest {
                     productReq.setDescription(product.getDescription());
                     productReq.setStatus(product.getStatus());
 
-                    // Kiểm tra xem dữ liệu có tồn tại không
+                    // Set category details if available
                     if (product.getCategory() != null) {
                         productReq.setCategoryId(product.getCategory().getId());
                         productReq.setCategoryName(product.getCategory().getName());
@@ -44,8 +46,8 @@ public class ProductRest {
                         productReq.setCategoryName(null);
                     }
 
-                    // Kiểm tra xem dữ liệu có tồn tại không
-                    if ( product.getBrand() != null) {
+                    // Set brand details if available
+                    if (product.getBrand() != null) {
                         productReq.setBrandId(product.getBrand().getId());
                         productReq.setBrandName(product.getBrand().getName());
                     } else {
@@ -53,18 +55,47 @@ public class ProductRest {
                         productReq.setBrandName(null);
                     }
 
-                    return productReq; // Trả về đối tượng UserReq đã tạo
-                })
-                .collect(Collectors.toList()); // Thu thập kết quả vào danh sách
+                    // Set main image and image URL
+                    if (product.getProductPhotos() != null && !product.getProductPhotos().isEmpty()) {
+                        ProductPhoto mainPhoto = product.getProductPhotos().stream()
+                                .filter(ProductPhoto::getMainImage)
+                                .findFirst()
+                                .orElse(null);
 
+                        if (mainPhoto != null) {
+                            productReq.setMainImage(true);
+                            productReq.setImageUrl(mainPhoto.getImageUrl());
+                        } else {
+                            productReq.setMainImage(false);
+                            productReq.setImageUrl(null);
+                        }
+
+                        // Collect non-main image URLs
+                        List<String> notMainImageUrls = product.getProductPhotos().stream()
+                                .filter(photo -> !photo.getMainImage())
+                                .map(ProductPhoto::getImageUrl) // Assuming getImageUrl() exists
+                                .collect(Collectors.toList());
+
+                        productReq.setNotMainImages(notMainImageUrls);
+                    } else {
+                        productReq.setMainImage(false);
+                        productReq.setImageUrl(null); // No photos available
+                        productReq.setNotMainImages(new ArrayList<>()); // Ensure empty list
+                    }
+
+                    return productReq;
+                })
+                .collect(Collectors.toList());
+
+        // Return response based on the presence of productReqs
         if (productReqs.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Trả về 204 nếu không có người dùng
+            return ResponseEntity.noContent().build(); // Return 204 if no products
         }
-        return ResponseEntity.ok(productReqs); // Trả về 200 và danh sách người dùng
+        return ResponseEntity.ok(productReqs); // Return 200 and the list of products
     }
 
-        @GetMapping("/{id}")
-        public ResponseEntity<Product> findById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> findById(@PathVariable Long id) {
             Product product = productService.getProductById(id);
             if (product != null) {
                 // Nếu tìm thấy , trả về HttpStatus 200 (OK) và thông tin
@@ -91,9 +122,13 @@ public class ProductRest {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductReq productReq) {
-        Product updateProduct = productService.updateProduct(id, productReq);
-        return ResponseEntity.ok(updateProduct); // Trả về 200 OK và đối tượng UserReq đã cập nhật
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductReq request) {
+        try {
+            Product updatedProduct = productService.updateProduct(id, request);
+            return ResponseEntity.ok(updatedProduct); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm
+        }
     }
 
 }

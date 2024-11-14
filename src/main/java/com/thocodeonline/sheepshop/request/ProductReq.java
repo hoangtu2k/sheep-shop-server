@@ -6,8 +6,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Setter
-@Getter
+@Setter @Getter
 public class ProductReq {
     private Long id;
     private String code;

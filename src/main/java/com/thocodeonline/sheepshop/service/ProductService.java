@@ -30,13 +30,7 @@ public class ProductService {
         return productRepository.getById(id);
     }
 
-    public ProductPhoto createProductPhoto(ProductReq image){
-        ProductPhoto productImage = new ProductPhoto();
-        productImage.setImageUrl(image.getImageUrl());
-        productImage.setMainImage(image.getMainImage());
-        productImage.setProduct(Product.builder().id(image.getProductId()).build());
-        return productPhotoRepository.save(productImage);
-    }
+
 
     public Product createProduct(ProductReq productReq) {
         // Create a new Product instance
@@ -74,7 +68,6 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-
     public Product updateProduct(Long id, ProductReq productReq) {
         // Kiểm tra xem sản phẩm có tồn tại không
         Optional<Product> optionalProduct = productRepository.findById(id);
@@ -111,38 +104,9 @@ public class ProductService {
             product.setBrand(null);
         }
 
-        // Xóa tất cả hình ảnh hiện tại
-        product.getProductPhotos().clear();
-
-        // Cập nhật ảnh chính
-        if (productReq.getImageUrl() != null) {
-            ProductPhoto mainPhoto = new ProductPhoto();
-            mainPhoto.setImageUrl(productReq.getImageUrl());
-            mainPhoto.setMainImage(true); // Đảm bảo rằng mainImage được đặt là true
-            mainPhoto.setProduct(product);
-            product.getProductPhotos().add(mainPhoto);
-        }
-
-        // Lưu các hình ảnh phụ mới
-        List<String> notMainImages = productReq.getNotMainImages();
-        if (notMainImages != null) {
-            for (String url : notMainImages) {
-                if (url != null && !url.isEmpty()) { // Kiểm tra URL không null và không rỗng
-                    ProductPhoto photo = new ProductPhoto();
-                    photo.setImageUrl(url);
-                    photo.setMainImage(false); // Đảm bảo rằng mainImage được đặt là false cho ảnh phụ
-                    photo.setProduct(product);
-                    product.getProductPhotos().add(photo);
-                }
-            }
-        }
-
         // Lưu sản phẩm
-        Product updatedProduct = productRepository.save(product);
-
-        return updatedProduct;
+        return productRepository.save(product);
     }
-
 
     private String generateUserCode() {
         return UUID.randomUUID().toString(); // Example using UUID

@@ -4,8 +4,7 @@ package com.thocodeonline.sheepshop.request;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+@Setter @Getter
 public class AccountReq {
     private  Long id;
     private String username;

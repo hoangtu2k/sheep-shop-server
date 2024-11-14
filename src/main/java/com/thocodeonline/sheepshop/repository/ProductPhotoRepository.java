@@ -17,4 +17,6 @@ public interface ProductPhotoRepository extends JpaRepository<ProductPhoto, Long
     @Query(value = "select p from ProductPhoto p")
     List<ProductPhoto> getAllProductPhoto();
 
+
+
 }

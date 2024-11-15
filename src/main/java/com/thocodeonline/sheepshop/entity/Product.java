@@ -25,7 +25,6 @@ public class Product {
     private String material;
     private Double weight;
     private String description;
-    private BigDecimal price;
     private Integer status;
 
     @ManyToOne

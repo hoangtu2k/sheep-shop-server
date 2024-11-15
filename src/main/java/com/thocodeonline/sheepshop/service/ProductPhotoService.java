@@ -43,6 +43,15 @@ public class ProductPhotoService {
                     System.out.println("Xóa mainImage");
                 }
             }
+
+            if (!hasMainImage) {
+                List<ProductPhoto> list = productPhotoRepository.getAllByIdSP1(image.getProductId());
+                for(ProductPhoto p : list){
+                    productPhotoRepository.delete(p);
+                    System.out.println("Xóa mainImage phụ");
+                }
+            }
+
         }
 
         // Tạo đối tượng ProductPhoto mới

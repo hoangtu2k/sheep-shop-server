@@ -23,5 +23,7 @@ public class InvoiceDetails {
     private ProductDetails productDetails;
     private Integer quantity;
     private BigDecimal unitPrice;
+    private Long colorId;
+    private Long sizeId;
 
 }

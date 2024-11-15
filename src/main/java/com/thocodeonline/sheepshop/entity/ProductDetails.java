@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class ProductDetails {
     @JoinColumn(name = "color_id")
     private Color color;
     private Integer quantity;
-    private String price;
+    private BigDecimal price;
 
     @JsonIgnore
     @OneToMany(mappedBy = "productDetails")

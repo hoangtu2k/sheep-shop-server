@@ -1,7 +1,7 @@
 package com.thocodeonline.sheepshop.controller;
 
 import com.thocodeonline.sheepshop.entity.Brand;
-import com.thocodeonline.sheepshop.request.AttributeProductReq;
+import com.thocodeonline.sheepshop.request.AttributeProductRequest;
 import com.thocodeonline.sheepshop.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +20,13 @@ public class BrandRest {
     private BrandService brandService;
 
     @GetMapping()
-    public ResponseEntity<List<AttributeProductReq>> getAllAccout() {
+    public ResponseEntity<List<AttributeProductRequest>> getAllAccout() {
         List<Brand> brands = brandService.getAllBrand();
 
         // Chuyển đổi danh sách User sang danh sách UserReq trực tiếp
-        List<AttributeProductReq> attributeProductReqs = brands.stream()
+        List<AttributeProductRequest> attributeProductReqs = brands.stream()
                 .map(brand  -> {
-                    AttributeProductReq req = new AttributeProductReq();
+                    AttributeProductRequest req = new AttributeProductRequest();
                     req.setId(brand.getId());
                     req.setName(brand.getName());
                     return req; // Trả về đối tượng UserReq đã tạo

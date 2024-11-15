@@ -30,8 +30,6 @@ public class ProductService {
         return productRepository.getById(id);
     }
 
-
-
     public Product createProduct(ProductReq productReq) {
         // Create a new Product instance
         Product product = new Product();
@@ -47,7 +45,6 @@ public class ProductService {
         // Set other product properties
         product.setBarcode(productReq.getBarcode());
         product.setName(productReq.getName());
-        product.setPrice(productReq.getPrice());
         product.setWeight(productReq.getWeight());
         product.setStatus(1);
 
@@ -88,7 +85,6 @@ public class ProductService {
         product.setBarcode(productReq.getBarcode());
         product.setName(productReq.getName());
         product.setWeight(productReq.getWeight());
-        product.setPrice(productReq.getPrice());
 
         // Cập nhật danh mục
         if (productReq.getCategoryId() != null) {

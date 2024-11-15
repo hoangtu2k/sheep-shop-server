@@ -27,9 +27,9 @@ public class Bill {
     private String phoneNumber; // số người nhận
     private BigDecimal totalAmount; // tổng tiền hàng
     private String note; // ghi chú
-    private Integer salesChannel; // kênh bán hàng
-    private Integer paymentStatus; // trạng thái thanh toán
-    private Integer orderStatus; // trạng thái đơn hàng
+    private Integer salesChannel; // kênh bán hàng 0 ban tay quay || 1 ban online
+    private Integer paymentStatus; // trạng thái thanh toán 0 chua thanh toan || 1 da thanh toan
+    private Integer orderStatus; // trạng thái đơn hàng 0 chua giao hang || 1 cho giao hang || 2 dang giao hang || 3 da giao hang
 
     @ManyToOne
     @JoinColumn(name = "user_id")

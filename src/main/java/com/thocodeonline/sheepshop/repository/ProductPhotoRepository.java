@@ -25,6 +25,9 @@ public interface ProductPhotoRepository extends JpaRepository<ProductPhoto, Long
     @Query(value = "SELECT e FROM ProductPhoto e WHERE e.product.id = :id and e.mainImage = true")
     List<ProductPhoto> getAllByIdSP1(@Param("id") Long id);
 
+    @Query(value = "SELECT e FROM ProductPhoto e WHERE e.product.id = :id and e.mainImage = false ")
+    List<ProductPhoto> getAllByIdSP0(@Param("id") Long id);
+
     boolean existsByProductIdAndMainImageTrue(Long productId);
 
 }

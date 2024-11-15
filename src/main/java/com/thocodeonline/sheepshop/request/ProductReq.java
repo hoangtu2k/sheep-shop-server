@@ -16,6 +16,7 @@ public class ProductReq {
     private Double weight;
     private String description;
     private BigDecimal price;
+    private Integer quantity;
     private Integer status;
     private Boolean mainImage;
     private List<String> notMainImages; // List of non-main image URLs

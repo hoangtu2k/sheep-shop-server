@@ -1,7 +1,7 @@
 package com.thocodeonline.sheepshop.controller;
 
 import com.thocodeonline.sheepshop.entity.Category;
-import com.thocodeonline.sheepshop.request.AttributeProductReq;
+import com.thocodeonline.sheepshop.request.AttributeProductRequest;
 import com.thocodeonline.sheepshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +20,13 @@ public class CategoryRest {
     private CategoryService categoryService;
 
     @GetMapping()
-    public ResponseEntity<List<AttributeProductReq>> getAllAccout() {
+    public ResponseEntity<List<AttributeProductRequest>> getAllAccout() {
         List<Category> categories = categoryService.getAllCategory();
 
         // Chuyển đổi danh sách User sang danh sách UserReq trực tiếp
-        List<AttributeProductReq> attributeProductReqs = categories.stream()
+        List<AttributeProductRequest> attributeProductReqs = categories.stream()
                 .map(category  -> {
-                    AttributeProductReq req = new AttributeProductReq();
+                    AttributeProductRequest req = new AttributeProductRequest();
                     req.setId(category.getId());
                     req.setName(category.getName());
                     return req; // Trả về đối tượng UserReq đã tạo

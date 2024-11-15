@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductPhotoRepository extends JpaRepository<ProductPhoto, Long> {
@@ -18,9 +19,12 @@ public interface ProductPhotoRepository extends JpaRepository<ProductPhoto, Long
     List<ProductPhoto> getAllProductPhoto();
 
 
-    @Query(value = "Select e from ProductPhoto  e where e.product.id = :id and e.mainImage = true")
-    List<ProductPhoto> getAllByIdSP(@Param("id") Integer id);
-    @Query(value = "Select e from ProductPhoto  e where e.product.id = :id and e.mainImage = false ")
-    List<ProductPhoto> getAllByIdSP1(@Param("id") Integer id);
+    @Query(value = "SELECT e FROM ProductPhoto e WHERE e.product.id = :id")
+    List<ProductPhoto> getAllByIdSP(@Param("id") Long id);
+
+    @Query(value = "SELECT e FROM ProductPhoto e WHERE e.product.id = :id and e.mainImage = true")
+    List<ProductPhoto> getAllByIdSP1(@Param("id") Long id);
+
+    boolean existsByProductIdAndMainImageTrue(Long productId);
 
 }

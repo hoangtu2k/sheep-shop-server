@@ -1,6 +1,5 @@
 package com.thocodeonline.sheepshop.controller;
 
-import com.thocodeonline.sheepshop.entity.ProductPhoto;
 import com.thocodeonline.sheepshop.request.ProductReq;
 import com.thocodeonline.sheepshop.service.ProductPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,8 @@ public class ProductPhotoRest {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id){
+    public ResponseEntity<?> delete(@PathVariable("id") Long id){
         service.deleteImg(id);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @DeleteMapping("/1/{id}")
-    public ResponseEntity<?> delete1(@PathVariable("id") Integer id){
-        service.delete1(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

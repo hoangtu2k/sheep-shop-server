@@ -30,27 +30,37 @@ public class ProductPhotoService {
         return productPhotoRepository.getById(id);
     }
 
-    public ProductPhoto createProductPhoto(ProductReq image){
+    public ProductPhoto createProductPhoto(ProductReq image) {
+        // Kiểm tra xem sản phẩm đã có ảnh chính (main image) hay chưa
+        if (image.getMainImage()) {
+            // Kiểm tra xem đã có ảnh chính nào tồn tại trong cơ sở dữ liệu chưa
+            boolean hasMainImage = productPhotoRepository.existsByProductIdAndMainImageTrue(image.getProductId());
+
+            if (hasMainImage) {
+                List<ProductPhoto> list = productPhotoRepository.getAllByIdSP(image.getProductId());
+                for(ProductPhoto p : list){
+                    productPhotoRepository.delete(p);
+                    System.out.println("Xóa mainImage");
+                }
+            }
+        }
+
+        // Tạo đối tượng ProductPhoto mới
         ProductPhoto productImage = new ProductPhoto();
         productImage.setImageUrl(image.getImageUrl());
         productImage.setMainImage(image.getMainImage());
         productImage.setProduct(Product.builder().id(image.getProductId()).build());
+
+        // Lưu vào cơ sở dữ liệu
         return productPhotoRepository.save(productImage);
     }
 
-
-    public void deleteImg(Integer IdProduct){
+    public void deleteImg(Long IdProduct){
         List<ProductPhoto> list = productPhotoRepository.getAllByIdSP(IdProduct);
         for(ProductPhoto p : list){
             productPhotoRepository.delete(p);
         }
     }
 
-    public void delete1(Integer IdProduct){
-        List<ProductPhoto> list = productPhotoRepository.getAllByIdSP1(IdProduct);
-        for(ProductPhoto p : list){
-            productPhotoRepository.delete(p);
-        }
-    }
 
 }

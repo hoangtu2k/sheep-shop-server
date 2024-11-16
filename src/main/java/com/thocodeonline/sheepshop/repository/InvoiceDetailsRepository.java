@@ -25,4 +25,7 @@ public interface InvoiceDetailsRepository extends JpaRepository<InvoiceDetails, 
     @Query(value = "select bd from InvoiceDetails bd WHERE bd.id = :id")
     InvoiceDetails getById(@Param("id") Long id);
 
+    @Query("SELECT bd FROM InvoiceDetails bd WHERE bd.bill.id = :billId AND bd.productDetails.id = :productDetailId")
+    InvoiceDetails findByBillAndProductDetails(@Param("billId") Long billId, @Param("productDetailId") Long productDetailId);
+
 }

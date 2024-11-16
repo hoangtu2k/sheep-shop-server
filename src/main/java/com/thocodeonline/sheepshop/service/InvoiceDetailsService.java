@@ -30,13 +30,24 @@ public class InvoiceDetailsService {
         return invoiceDetailsRepository.findAllByBillId(billId);
     }
 
-    public InvoiceDetails addBillDetail(InvoiceDetailsRequest request){
-        InvoiceDetails billDetail = new InvoiceDetails();
-        billDetail.setBill(Bill.builder().id(request.getBillId()).build());
-        billDetail.setProductDetails(ProductDetails.builder().id(request.getProductDetailId()).build());
-        billDetail.setQuantity(request.getQuantity());
-        billDetail.setUnitPrice(request.getUnitPrice());
-        return invoiceDetailsRepository.save(billDetail);
+    public InvoiceDetails addBillDetail(InvoiceDetailsRequest request) {
+        // Tìm hóa đơn hiện tại
+        InvoiceDetails existingDetail = invoiceDetailsRepository.findByBillAndProductDetails(request.getBillId(), request.getProductDetailId());
+
+        if (existingDetail != null) {
+            // Nếu sản phẩm đã tồn tại, cộng dồn số lượng
+            existingDetail.setQuantity(existingDetail.getQuantity() + request.getQuantity());
+            return invoiceDetailsRepository.save(existingDetail);
+        } else {
+            // Nếu sản phẩm chưa tồn tại, tạo mới
+            InvoiceDetails billDetail = new InvoiceDetails();
+            billDetail.setBill(Bill.builder().id(request.getBillId()).build());
+            billDetail.setProductDetails(ProductDetails.builder().id(request.getProductDetailId()).build());
+            billDetail.setQuantity(request.getQuantity());
+            billDetail.setUnitPrice(request.getUnitPrice());
+
+            return invoiceDetailsRepository.save(billDetail);
+        }
     }
 
     public void deleteByInvoiceId(Long id) {

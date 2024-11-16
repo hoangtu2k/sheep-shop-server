@@ -25,5 +25,4 @@ public class InvoiceDetails {
     private BigDecimal unitPrice;
     private Long colorId;
     private Long sizeId;
-
 }

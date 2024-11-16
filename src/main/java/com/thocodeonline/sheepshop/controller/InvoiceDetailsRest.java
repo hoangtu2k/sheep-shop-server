@@ -19,7 +19,6 @@ public class InvoiceDetailsRest {
     @Autowired
     private InvoiceDetailsService invoiceDetailsService;
 
-
     @GetMapping("/{id}")
     public ResponseEntity<InvoiceDetails> findById(@PathVariable Long id) {
         InvoiceDetails invoiceDetails = invoiceDetailsService.getInvoiceDetailsById(id);
@@ -43,7 +42,7 @@ public class InvoiceDetailsRest {
                     invoiceDetailsRequest.setBillId(invoiceDetail.getBill().getId());
                     invoiceDetailsRequest.setProductDetailId(invoiceDetail.getProductDetails().getId());
                     invoiceDetailsRequest.setProductDetailName(invoiceDetail.getProductDetails().getProduct().getName());
-
+                    invoiceDetailsRequest.setProductDetailId(invoiceDetail.getProductDetails().getProduct().getId());
                     // Get the main image URL
                     String mainImageUrl = invoiceDetail.getProductDetails().getProduct().getProductPhotos().stream()
                             .filter(photo -> Boolean.TRUE.equals(photo.getMainImage()))
@@ -65,8 +64,6 @@ public class InvoiceDetailsRest {
         }
         return ResponseEntity.ok(invoiceDetailsRequestList);
     }
-
-
 
     @PostMapping()
     public ResponseEntity<InvoiceDetails> createBillDetails(@RequestBody InvoiceDetailsRequest invoiceDetailsRequest) {

@@ -1,6 +1,5 @@
 package com.thocodeonline.sheepshop.controller;
 
-import com.thocodeonline.sheepshop.entity.Product;
 import com.thocodeonline.sheepshop.entity.ProductDetails;
 import com.thocodeonline.sheepshop.entity.ProductPhoto;
 import com.thocodeonline.sheepshop.request.ProductReq;
@@ -115,10 +114,33 @@ public class ProductDetailRest {
         return ResponseEntity.ok(productReqs); // Return 200 and the list of products
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDetails> findById(@PathVariable Long id) {
+        ProductDetails productDetails = productDetailService.getProductDetailsById(id);
+
+        if (productDetails != null) {
+            return ResponseEntity.ok(productDetails);
+        } else {
+            // Nếu không tìm thấy, trả về HttpStatus 404 (Not Found)
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping("/update-quantity/{id}")
     public ResponseEntity<ProductDetails> updateQuantityProductSreach(@PathVariable Long id ,@RequestBody ProductReq productReq) {
         try {
             ProductDetails updatedProductdetails = productDetailService.updateProductDetailQuantityService(id, productReq);
+            return ResponseEntity.ok(updatedProductdetails); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm
+
+        }
+    }
+
+    @PutMapping("/delete-productdetail-update-quantity/{id}")
+    public ResponseEntity<ProductDetails> deleteProductDetailUpdateQuantity(@PathVariable Long id ,@RequestBody ProductReq productReq) {
+        try {
+            ProductDetails updatedProductdetails = productDetailService.deleteProductDetailUpdateQuantity(id, productReq);
             return ResponseEntity.ok(updatedProductdetails); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm

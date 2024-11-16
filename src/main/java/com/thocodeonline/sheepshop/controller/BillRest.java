@@ -68,7 +68,6 @@ public class BillRest {
     public ResponseEntity<Void> deleteBill(@PathVariable Long id) {
             billService.deleteBill(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
     }
 
 }

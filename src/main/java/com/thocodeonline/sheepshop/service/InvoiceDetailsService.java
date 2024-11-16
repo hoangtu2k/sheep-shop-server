@@ -5,6 +5,7 @@ import com.thocodeonline.sheepshop.entity.InvoiceDetails;
 import com.thocodeonline.sheepshop.entity.ProductDetails;
 import com.thocodeonline.sheepshop.repository.InvoiceDetailsRepository;
 import com.thocodeonline.sheepshop.request.InvoiceDetailsRequest;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,10 @@ public class InvoiceDetailsService {
         return null;
     }
 
+    public InvoiceDetails getInvoiceDetailsById(Long id) {
+        return invoiceDetailsRepository.getById(id);
+    }
+
     public List<InvoiceDetails> getAllBillProductDetails(Long billId) {
         return invoiceDetailsRepository.findAllByBillId(billId);
     }
@@ -32,6 +37,13 @@ public class InvoiceDetailsService {
         billDetail.setQuantity(request.getQuantity());
         billDetail.setUnitPrice(request.getUnitPrice());
         return invoiceDetailsRepository.save(billDetail);
+    }
+
+    public void deleteByInvoiceId(Long id) {
+        if (!invoiceDetailsRepository.existsById(id)) {
+            throw new EntityNotFoundException("Bill not found with ID: " + id);
+        }
+        invoiceDetailsRepository.deleteByInvoiceId(id);
     }
 
 }

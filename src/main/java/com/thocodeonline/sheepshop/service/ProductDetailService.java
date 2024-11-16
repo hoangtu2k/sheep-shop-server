@@ -19,6 +19,10 @@ public class ProductDetailService {
         return productDetailRepository.getAllProductDetails();
     }
 
+    public ProductDetails getProductDetailsById(Long id) {
+        return productDetailRepository.getById(id);
+    }
+
     public ProductDetails updateProductDetailQuantityService(Long id, ProductReq productReq) {
         // Tìm sản phẩm theo ID
         ProductDetails productDetails = productDetailRepository.findById(id)
@@ -32,6 +36,16 @@ public class ProductDetailService {
             throw new RuntimeException("Số lượng chỉ được trừ 1: " + productReq.getQuantity());
         }
 
+        // Lưu lại sản phẩm đã cập nhật
+        return productDetailRepository.save(productDetails);
+    }
+
+    public ProductDetails deleteProductDetailUpdateQuantity(Long id, ProductReq productReq) {
+        // Tìm sản phẩm theo ID
+        ProductDetails productDetails = productDetailRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại với ID: " + id));
+
+        productDetails.setQuantity(productDetails.getQuantity() + productReq.getQuantity());
         // Lưu lại sản phẩm đã cập nhật
         return productDetailRepository.save(productDetails);
     }

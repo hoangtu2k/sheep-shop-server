@@ -1,12 +1,8 @@
 package com.thocodeonline.sheepshop.controller;
 
-import com.thocodeonline.sheepshop.entity.Account;
 import com.thocodeonline.sheepshop.entity.InvoiceDetails;
-import com.thocodeonline.sheepshop.entity.Product;
 import com.thocodeonline.sheepshop.entity.ProductPhoto;
-import com.thocodeonline.sheepshop.request.AccountRequest;
 import com.thocodeonline.sheepshop.request.InvoiceDetailsRequest;
-import com.thocodeonline.sheepshop.request.ProductReq;
 import com.thocodeonline.sheepshop.service.InvoiceDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +19,20 @@ public class InvoiceDetailsRest {
     @Autowired
     private InvoiceDetailsService invoiceDetailsService;
 
-    @GetMapping("/{billId}")
+
+    @GetMapping("/{id}")
+    public ResponseEntity<InvoiceDetails> findById(@PathVariable Long id) {
+        InvoiceDetails invoiceDetails = invoiceDetailsService.getInvoiceDetailsById(id);
+
+        if (invoiceDetails != null) {
+            return ResponseEntity.ok(invoiceDetails);
+        } else {
+            // Nếu không tìm thấy, trả về HttpStatus 404 (Not Found)
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/bill/{billId}")
     public ResponseEntity<List<InvoiceDetailsRequest>> getAllBillProductDetails(@PathVariable Long billId) {
         List<InvoiceDetails> invoiceDetails = invoiceDetailsService.getAllBillProductDetails(billId);
 
@@ -57,6 +66,8 @@ public class InvoiceDetailsRest {
         return ResponseEntity.ok(invoiceDetailsRequestList);
     }
 
+
+
     @PostMapping()
     public ResponseEntity<InvoiceDetails> createBillDetails(@RequestBody InvoiceDetailsRequest invoiceDetailsRequest) {
         // Kiểm tra tính hợp lệ
@@ -70,6 +81,12 @@ public class InvoiceDetailsRest {
             // Xử lý lỗi phù hợp (có thể ghi log hoặc trả về thông báo cụ thể hơn)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteInvoiceDetail(@PathVariable Long id) {
+        invoiceDetailsService.deleteByInvoiceId(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

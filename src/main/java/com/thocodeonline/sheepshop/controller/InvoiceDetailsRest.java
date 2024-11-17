@@ -39,10 +39,14 @@ public class InvoiceDetailsRest {
                 .map(invoiceDetail -> {
                     InvoiceDetailsRequest invoiceDetailsRequest = new InvoiceDetailsRequest();
                     invoiceDetailsRequest.setInvoiceId(invoiceDetail.getId());
+                    invoiceDetailsRequest.setQuantity(invoiceDetail.getQuantity());
+                    invoiceDetailsRequest.setUnitPrice(invoiceDetail.getUnitPrice());
                     invoiceDetailsRequest.setBillId(invoiceDetail.getBill().getId());
                     invoiceDetailsRequest.setProductDetailId(invoiceDetail.getProductDetails().getId());
                     invoiceDetailsRequest.setProductDetailName(invoiceDetail.getProductDetails().getProduct().getName());
-                    invoiceDetailsRequest.setProductDetailId(invoiceDetail.getProductDetails().getProduct().getId());
+                    invoiceDetailsRequest.setColorId(invoiceDetail.getColorId());
+                    invoiceDetailsRequest.setSizeId(invoiceDetail.getSizeId());
+
                     // Get the main image URL
                     String mainImageUrl = invoiceDetail.getProductDetails().getProduct().getProductPhotos().stream()
                             .filter(photo -> Boolean.TRUE.equals(photo.getMainImage()))
@@ -51,10 +55,7 @@ public class InvoiceDetailsRest {
                             .orElse(null);
 
                     invoiceDetailsRequest.setProductDetailUrlImage(mainImageUrl);
-                    invoiceDetailsRequest.setQuantity(invoiceDetail.getQuantity());
-                    invoiceDetailsRequest.setUnitPrice(invoiceDetail.getUnitPrice());
-//                    invoiceDetailsRequest.setColorId(invoiceDetail.getColorId());
-//                    invoiceDetailsRequest.setSizeId(invoiceDetail.getSizeId());
+
                     return invoiceDetailsRequest;
                 })
                 .collect(Collectors.toList());
@@ -73,6 +74,37 @@ public class InvoiceDetailsRest {
         }
         try {
             InvoiceDetails invoiceDetails = invoiceDetailsService.addBillDetail(invoiceDetailsRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(invoiceDetails);
+        } catch (Exception e) {
+            // Xử lý lỗi phù hợp (có thể ghi log hoặc trả về thông báo cụ thể hơn)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @PutMapping("/increase/{id}")
+    public ResponseEntity<InvoiceDetails> increaseBillDetail(@PathVariable Long id,@RequestBody InvoiceDetailsRequest invoiceDetailsRequest) {
+        // Kiểm tra tính hợp lệ
+        if (invoiceDetailsRequest == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            InvoiceDetails invoiceDetails = invoiceDetailsService.increaseBillDetail(id,invoiceDetailsRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(invoiceDetails);
+        } catch (Exception e) {
+            // Xử lý lỗi phù hợp (có thể ghi log hoặc trả về thông báo cụ thể hơn)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/reduce/{id}")
+    public ResponseEntity<InvoiceDetails> reduceBillDetail(@PathVariable Long id,@RequestBody InvoiceDetailsRequest invoiceDetailsRequest) {
+        // Kiểm tra tính hợp lệ
+        if (invoiceDetailsRequest == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            InvoiceDetails invoiceDetails = invoiceDetailsService.reduceBillDetail(id,invoiceDetailsRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(invoiceDetails);
         } catch (Exception e) {
             // Xử lý lỗi phù hợp (có thể ghi log hoặc trả về thông báo cụ thể hơn)

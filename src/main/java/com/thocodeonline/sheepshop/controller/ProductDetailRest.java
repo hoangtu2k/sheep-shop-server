@@ -126,10 +126,21 @@ public class ProductDetailRest {
         }
     }
 
-    @PutMapping("/update-quantity/{id}")
-    public ResponseEntity<ProductDetails> updateQuantityProductSreach(@PathVariable Long id ,@RequestBody ProductReq productReq) {
+    @PutMapping("/update-quantity/increase/{id}")
+    public ResponseEntity<ProductDetails> updateProductDetailreduceQuantityService(@PathVariable Long id ,@RequestBody ProductReq productReq) {
         try {
-            ProductDetails updatedProductdetails = productDetailService.updateProductDetailQuantityService(id, productReq);
+            ProductDetails updatedProductdetails = productDetailService.updateProductDetailreduceQuantityService(id, productReq);
+            return ResponseEntity.ok(updatedProductdetails); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm
+
+        }
+    }
+
+    @PutMapping("/update-quantity/reduce/{id}")
+    public ResponseEntity<ProductDetails> updateProductDetailincreaseQuantityService(@PathVariable Long id ,@RequestBody ProductReq productReq) {
+        try {
+            ProductDetails updatedProductdetails = productDetailService.updateProductDetailincreaseQuantityService(id, productReq);
             return ResponseEntity.ok(updatedProductdetails); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm

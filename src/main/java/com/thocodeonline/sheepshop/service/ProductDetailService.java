@@ -23,7 +23,7 @@ public class ProductDetailService {
         return productDetailRepository.getById(id);
     }
 
-    public ProductDetails updateProductDetailQuantityService(Long id, ProductReq productReq) {
+    public ProductDetails updateProductDetailreduceQuantityService(Long id, ProductReq productReq) {
         // Tìm sản phẩm theo ID
         ProductDetails productDetails = productDetailRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại với ID: " + id));
@@ -34,6 +34,23 @@ public class ProductDetailService {
             productDetails.setQuantity(productDetails.getQuantity() - 1);
         } else {
             throw new RuntimeException("Số lượng chỉ được trừ 1: " + productReq.getQuantity());
+        }
+
+        // Lưu lại sản phẩm đã cập nhật
+        return productDetailRepository.save(productDetails);
+    }
+
+    public ProductDetails updateProductDetailincreaseQuantityService(Long id, ProductReq productReq) {
+        // Tìm sản phẩm theo ID
+        ProductDetails productDetails = productDetailRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại với ID: " + id));
+
+        // Kiểm tra số lượng yêu cầu
+        if (productReq.getQuantity() == 1) {
+            // tăng lại số lượng sản phẩm
+            productDetails.setQuantity(productDetails.getQuantity() + 1);
+        } else {
+            throw new RuntimeException("Số lượng chỉ được cộng 1: " + productReq.getQuantity());
         }
 
         // Lưu lại sản phẩm đã cập nhật

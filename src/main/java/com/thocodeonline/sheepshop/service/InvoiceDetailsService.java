@@ -17,11 +17,6 @@ public class InvoiceDetailsService {
     @Autowired
     private InvoiceDetailsRepository invoiceDetailsRepository;
 
-    public InvoiceDetails updateProductDetailsToInvoiceDetails(String invoiceId) {
-
-        return null;
-    }
-
     public InvoiceDetails getInvoiceDetailsById(Long id) {
         return invoiceDetailsRepository.getById(id);
     }
@@ -45,9 +40,37 @@ public class InvoiceDetailsService {
             billDetail.setProductDetails(ProductDetails.builder().id(request.getProductDetailId()).build());
             billDetail.setQuantity(request.getQuantity());
             billDetail.setUnitPrice(request.getUnitPrice());
+            billDetail.setColorId(request.getColorId());
+            billDetail.setSizeId(request.getSizeId());
 
             return invoiceDetailsRepository.save(billDetail);
         }
+    }
+
+    public InvoiceDetails increaseBillDetail(Long id,InvoiceDetailsRequest request) {
+            InvoiceDetails billDetail = invoiceDetailsRepository.getById(id);
+            billDetail.setBill(Bill.builder().id(request.getBillId()).build());
+            billDetail.setProductDetails(ProductDetails.builder().id(request.getProductDetailId()).build());
+            billDetail.setQuantity(billDetail.getQuantity() + 1);
+            billDetail.setSizeId(request.getSizeId());
+            billDetail.setColorId(request.getColorId());
+            return invoiceDetailsRepository.save(billDetail);
+    }
+
+    public InvoiceDetails reduceBillDetail(Long id, InvoiceDetailsRequest request) {
+        InvoiceDetails billDetail = invoiceDetailsRepository.getById(id);
+        billDetail.setBill(Bill.builder().id(request.getBillId()).build());
+        billDetail.setProductDetails(ProductDetails.builder().id(request.getProductDetailId()).build());
+        billDetail.setQuantity(billDetail.getQuantity() - 1);
+        billDetail.setSizeId(request.getSizeId());
+        billDetail.setColorId(request.getColorId());
+        // Check if quantity is 0, then delete
+        if (billDetail.getQuantity() <= 0) {
+            invoiceDetailsRepository.delete(billDetail);
+            return null; // or throw an exception, depending on your needs
+        }
+
+        return invoiceDetailsRepository.save(billDetail);
     }
 
     public void deleteByInvoiceId(Long id) {

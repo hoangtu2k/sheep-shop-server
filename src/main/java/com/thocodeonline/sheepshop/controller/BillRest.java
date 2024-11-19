@@ -1,9 +1,7 @@
 package com.thocodeonline.sheepshop.controller;
 
 import com.thocodeonline.sheepshop.entity.Bill;
-import com.thocodeonline.sheepshop.entity.Product;
 import com.thocodeonline.sheepshop.request.BillReq;
-import com.thocodeonline.sheepshop.request.ProductReq;
 import com.thocodeonline.sheepshop.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/sale/billtaiquay")
+@RequestMapping("/sale/bill")
 public class BillRest {
 
     @Autowired
@@ -48,7 +46,7 @@ public class BillRest {
     }
 
     @PostMapping()
-    public ResponseEntity<Bill> createProduct(@RequestBody BillReq billReq) {
+    public ResponseEntity<Bill> createBillTaiQiay(@RequestBody BillReq billReq) {
         // Kiểm tra tính hợp lệ
         if (billReq == null) {
             return ResponseEntity.badRequest().build();
@@ -62,7 +60,15 @@ public class BillRest {
         }
     }
 
-
+    @PutMapping("/{id}")
+    public ResponseEntity<Bill> updatePayBillTaiQuay(@PathVariable Long id, @RequestBody BillReq request) {
+        try {
+            Bill updatePayBillTaiQiay = billService.updatePayBillTaiQuay(id, request);
+            return ResponseEntity.ok(updatePayBillTaiQiay); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm
+        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBill(@PathVariable Long id) {

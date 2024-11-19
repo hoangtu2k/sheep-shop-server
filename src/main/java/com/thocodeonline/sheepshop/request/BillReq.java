@@ -20,4 +20,9 @@ public class BillReq {
     private Integer salesChannel; // kênh bán hàng 0 ban tay quay || 1 ban online
     private Integer paymentStatus; // trạng thái thanh toán 0 chua thanh toan || 1 da thanh toan
     private Integer orderStatus;
+
+    private Long userId;
+    private String createName;
+    private String updateName;
+
 }

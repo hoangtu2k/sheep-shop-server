@@ -2,6 +2,7 @@ package com.thocodeonline.sheepshop.service;
 
 import com.thocodeonline.sheepshop.entity.Bill;
 import com.thocodeonline.sheepshop.entity.InvoiceDetails;
+import com.thocodeonline.sheepshop.entity.User;
 import com.thocodeonline.sheepshop.repository.BillRepository;
 import com.thocodeonline.sheepshop.repository.InvoiceDetailsRepository;
 import com.thocodeonline.sheepshop.request.BillReq;
@@ -30,6 +31,20 @@ public class BillService {
         bill.setCode(generateUserCode());
         bill.setPaymentStatus(0);
         bill.setSalesChannel(0);
+
+        bill.setCreateName(billReq.getCreateName());
+        bill.setUser(User.builder().id(billReq.getUserId()).build());
+        return billRepository.save(bill);
+    }
+
+    public Bill updatePayBillTaiQuay(Long id, BillReq billReq){
+        Bill bill = billRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Hóa đơn không tồn tại với ID: " + id));
+        bill.setSalesChannel(billReq.getSalesChannel());
+        bill.setBuyerName(billReq.getBuyerName());
+        bill.setTotalAmount(billReq.getTotalAmount());
+        bill.setNote(billReq.getNote());
+        bill.setPaymentStatus(1);
         return billRepository.save(bill);
     }
 

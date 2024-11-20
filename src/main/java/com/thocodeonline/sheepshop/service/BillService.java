@@ -29,7 +29,7 @@ public class BillService {
 
     public Bill createBillTaiQiay(BillRequest billRequest){
         Bill bill = new Bill();
-        bill.setCode(generateUserCode());
+        bill.setCode(getNextMa());
         bill.setPaymentStatus(0);
         bill.setCreateName(billRequest.getCreateName());
         bill.setUser(User.builder().id(billRequest.getUserId()).build());
@@ -45,7 +45,12 @@ public class BillService {
         bill.setNote(billRequest.getNote());
         bill.setFormOfPayment(billRequest.getFormOfPayment());
         bill.setBuyerName(billRequest.getBuyerName());
-        bill.setCustomer(Customer.builder().id(billRequest.getCustomerId()).build());
+        if (billRequest.getCustomerId() != null) {
+            bill.setCustomer(Customer.builder().id(billRequest.getCustomerId()).build());
+        } else {
+            bill.setCustomer(null);
+        }
+
         bill.setPayer(bill.getPayer());
         bill.setPaymentStatus(1);
         return billRepository.save(bill);
@@ -62,8 +67,15 @@ public class BillService {
         billRepository.deleteByBillId(id);
     }
 
-    private String generateUserCode() {
-        return UUID.randomUUID().toString(); // Example using UUID
+    private String getNextMa() {
+        String biggestMa = billRepository.getBiggestMa();
+        if (biggestMa == null || biggestMa.isEmpty()) {
+            return "HD01";
+        } else {
+            int currentMa = Integer.parseInt(biggestMa.substring(2));
+            String newMa = "HD" + String.format("%02d", ++currentMa);
+            return newMa;
+        }
     }
 
 }

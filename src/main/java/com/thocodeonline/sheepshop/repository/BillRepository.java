@@ -13,7 +13,10 @@ import java.util.List;
 @Repository
 public interface BillRepository extends JpaRepository<Bill, Long> {
 
-    @Query(value = "select b from Bill b where b.paymentStatus = 0 and b.salesChannel = 0 ")
+    @Query(value = "SELECT Code FROM Bill b ORDER BY LENGTH(b.Code) DESC, b.Code DESC LIMIT 1", nativeQuery = true)
+    String getBiggestMa();
+
+    @Query(value = "select b from Bill b where b.paymentStatus = 0")
     List<Bill> getAllBillTaiQuay();
 
     @Modifying

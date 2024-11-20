@@ -1,6 +1,6 @@
 package com.thocodeonline.sheepshop.controller;
 
-import com.thocodeonline.sheepshop.request.ProductReq;
+import com.thocodeonline.sheepshop.request.ProductRequest;
 import com.thocodeonline.sheepshop.service.ProductPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ public class ProductPhotoRest {
     private ProductPhotoService service;
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody ProductReq image){
+    public ResponseEntity<?> add(@RequestBody ProductRequest image){
         return ResponseEntity.ok(service.createProductPhoto(image));
     }
 

@@ -4,7 +4,7 @@ import com.thocodeonline.sheepshop.entity.Product;
 import com.thocodeonline.sheepshop.entity.ProductPhoto;
 import com.thocodeonline.sheepshop.repository.ProductPhotoRepository;
 import com.thocodeonline.sheepshop.repository.ProductRepository;
-import com.thocodeonline.sheepshop.request.ProductReq;
+import com.thocodeonline.sheepshop.request.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class ProductPhotoService {
         return productPhotoRepository.getById(id);
     }
 
-    public ProductPhoto createProductPhoto(ProductReq image) {
+    public ProductPhoto createProductPhoto(ProductRequest image) {
         // Kiểm tra xem sản phẩm đã có ảnh chính (main image) hay chưa
         if (image.getMainImage()) {
             // Kiểm tra xem đã có ảnh chính nào tồn tại trong cơ sở dữ liệu chưa

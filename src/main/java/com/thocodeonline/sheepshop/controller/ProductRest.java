@@ -2,7 +2,7 @@ package com.thocodeonline.sheepshop.controller;
 
 import com.thocodeonline.sheepshop.entity.Product;
 import com.thocodeonline.sheepshop.entity.ProductPhoto;
-import com.thocodeonline.sheepshop.request.ProductReq;
+import com.thocodeonline.sheepshop.request.ProductRequest;
 import com.thocodeonline.sheepshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,39 +21,39 @@ public class ProductRest {
     private ProductService productService;
 
     @GetMapping()
-    public ResponseEntity<List<ProductReq>> getAll() {
+    public ResponseEntity<List<ProductRequest>> getAll() {
         // Retrieve the list of products from the service
         List<Product> products = productService.getAllProduct();
 
         // Convert the list of Product to ProductReq
-        List<ProductReq> productReqs = products.stream()
+        List<ProductRequest> productRequests = products.stream()
                 .map(product -> {
-                    ProductReq productReq = new ProductReq();
-                    productReq.setId(product.getId());
-                    productReq.setCode(product.getCode());
-                    productReq.setBarcode(product.getBarcode());
-                    productReq.setName(product.getName());
-                    productReq.setDescription(product.getDescription());
-                    productReq.setStatus(product.getStatus());
-                    productReq.setWeight(product.getWeight());
+                    ProductRequest productRequest = new ProductRequest();
+                    productRequest.setId(product.getId());
+                    productRequest.setCode(product.getCode());
+                    productRequest.setBarcode(product.getBarcode());
+                    productRequest.setName(product.getName());
+                    productRequest.setDescription(product.getDescription());
+                    productRequest.setStatus(product.getStatus());
+                    productRequest.setWeight(product.getWeight());
 
 
                     // Set category details if available
                     if (product.getCategory() != null) {
-                        productReq.setCategoryId(product.getCategory().getId());
-                        productReq.setCategoryName(product.getCategory().getName());
+                        productRequest.setCategoryId(product.getCategory().getId());
+                        productRequest.setCategoryName(product.getCategory().getName());
                     } else {
-                        productReq.setCategoryId(null);
-                        productReq.setCategoryName(null);
+                        productRequest.setCategoryId(null);
+                        productRequest.setCategoryName(null);
                     }
 
                     // Set brand details if available
                     if (product.getBrand() != null) {
-                        productReq.setBrandId(product.getBrand().getId());
-                        productReq.setBrandName(product.getBrand().getName());
+                        productRequest.setBrandId(product.getBrand().getId());
+                        productRequest.setBrandName(product.getBrand().getName());
                     } else {
-                        productReq.setBrandId(null);
-                        productReq.setBrandName(null);
+                        productRequest.setBrandId(null);
+                        productRequest.setBrandName(null);
                     }
 
                     // Set main image and image URL
@@ -64,11 +64,11 @@ public class ProductRest {
                                 .orElse(null);
 
                         if (mainPhoto != null) {
-                            productReq.setMainImage(true);
-                            productReq.setImageUrl(mainPhoto.getImageUrl());
+                            productRequest.setMainImage(true);
+                            productRequest.setImageUrl(mainPhoto.getImageUrl());
                         } else {
-                            productReq.setMainImage(false);
-                            productReq.setImageUrl(null);
+                            productRequest.setMainImage(false);
+                            productRequest.setImageUrl(null);
                         }
 
                         // Collect non-main image URLs
@@ -77,22 +77,22 @@ public class ProductRest {
                                 .map(ProductPhoto::getImageUrl) // Assuming getImageUrl() exists
                                 .collect(Collectors.toList());
 
-                        productReq.setNotMainImages(notMainImageUrls);
+                        productRequest.setNotMainImages(notMainImageUrls);
                     } else {
-                        productReq.setMainImage(false);
-                        productReq.setImageUrl(null); // No photos available
-                        productReq.setNotMainImages(new ArrayList<>()); // Ensure empty list
+                        productRequest.setMainImage(false);
+                        productRequest.setImageUrl(null); // No photos available
+                        productRequest.setNotMainImages(new ArrayList<>()); // Ensure empty list
                     }
 
-                    return productReq;
+                    return productRequest;
                 })
                 .collect(Collectors.toList());
 
         // Return response based on the presence of productReqs
-        if (productReqs.isEmpty()) {
+        if (productRequests.isEmpty()) {
             return ResponseEntity.noContent().build(); // Return 204 if no products
         }
-        return ResponseEntity.ok(productReqs); // Return 200 and the list of products
+        return ResponseEntity.ok(productRequests); // Return 200 and the list of products
     }
 
     @GetMapping("/{id}")
@@ -108,13 +108,13 @@ public class ProductRest {
         }
 
     @PostMapping()
-    public ResponseEntity<Product> createProduct(@RequestBody ProductReq productReq) {
+    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
         // Kiểm tra tính hợp lệ
-        if (productReq == null) {
+        if (productRequest == null) {
             return ResponseEntity.badRequest().build();
         }
         try {
-            Product createdProduct = productService.createProduct(productReq);
+            Product createdProduct = productService.createProduct(productRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
         } catch (Exception e) {
             // Xử lý lỗi phù hợp (có thể ghi log hoặc trả về thông báo cụ thể hơn)
@@ -123,7 +123,7 @@ public class ProductRest {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductReq request) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductRequest request) {
         try {
             Product updatedProduct = productService.updateProduct(id, request);
             return ResponseEntity.ok(updatedProduct); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật

@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Setter @Getter
-public class UserReq {
+public class UserRequest {
     private Long id;
     private String code;
     private String name;

@@ -3,7 +3,7 @@ package com.thocodeonline.sheepshop.service;
 import com.thocodeonline.sheepshop.entity.Account;
 import com.thocodeonline.sheepshop.entity.User;
 import com.thocodeonline.sheepshop.repository.UserRepository;
-import com.thocodeonline.sheepshop.request.UserReq;
+import com.thocodeonline.sheepshop.request.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,30 +25,30 @@ public class UserService {
         return userRepository.getAllUser();
     }
 
-    public User createUser(UserReq userReq) {
+    public User createUser(UserRequest userRequest) {
         User user = new User();
-        if (userReq.getCode() == null) {
+        if (userRequest.getCode() == null) {
             // Generate a new code automatically if it's null
             String generatedCode = generateUserCode();
             user.setCode(generatedCode);
         } else {
             // Otherwise, set the code from the request
-            user.setCode(userReq.getCode());
+            user.setCode(userRequest.getCode());
         }
-        user.setName(userReq.getName());
-        user.setPhone(userReq.getPhone());
-        user.setEmail(userReq.getEmail());
-        user.setDateOfBirth(userReq.getDateOfBirth());
-        user.setGender(userReq.getGender());
+        user.setName(userRequest.getName());
+        user.setPhone(userRequest.getPhone());
+        user.setEmail(userRequest.getEmail());
+        user.setDateOfBirth(userRequest.getDateOfBirth());
+        user.setGender(userRequest.getGender());
 
-        if (userReq.getImage() != null) {
-            user.setImage(userReq.getImage());
+        if (userRequest.getImage() != null) {
+            user.setImage(userRequest.getImage());
         } else {
             user.setImage(null);
         }
         
-        if (userReq.getAccountId() != null) {
-             user.setAccount(Account.builder().id(userReq.getAccountId()).build());
+        if (userRequest.getAccountId() != null) {
+             user.setAccount(Account.builder().id(userRequest.getAccountId()).build());
         } else {
             user.setAccount(null);
         }
@@ -81,31 +81,31 @@ public class UserService {
 
     }
 
-    public User updateUser( Long id, UserReq userReq) {
+    public User updateUser( Long id, UserRequest userRequest) {
         // Kiểm tra xem người dùng có tồn tại không
         Optional<User> optionalUser = userRepository.findById(id);
         if (!optionalUser.isPresent()) {
             throw new RuntimeException("User not found with id: " + id);
         }
         User user = optionalUser.get();
-        if (userReq.getCode() == null) {
+        if (userRequest.getCode() == null) {
             // Generate a new code automatically if it's null
             String generatedCode = generateUserCode();
             user.setCode(generatedCode);
         } else {
             // Otherwise, set the code from the request
-            user.setCode(userReq.getCode());
+            user.setCode(userRequest.getCode());
         }
-        user.setName(userReq.getName());
-        user.setPhone(userReq.getPhone());
-        user.setEmail(userReq.getEmail());
-        user.setDateOfBirth(userReq.getDateOfBirth());
-        user.setGender(userReq.getGender());
+        user.setName(userRequest.getName());
+        user.setPhone(userRequest.getPhone());
+        user.setEmail(userRequest.getEmail());
+        user.setDateOfBirth(userRequest.getDateOfBirth());
+        user.setGender(userRequest.getGender());
 
-        user.setImage(userReq.getImage());
+        user.setImage(userRequest.getImage());
 
         // Check the accountId provided in the request
-        Long accountId = userReq.getAccountId();
+        Long accountId = userRequest.getAccountId();
         if (accountId != null) {
             // Check if any other user already uses this account ID
             List<User> allUsers = userRepository.getAllUser(); // Fetch all users

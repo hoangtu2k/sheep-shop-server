@@ -30,13 +30,16 @@ public class Bill {
     private Integer salesChannel; // kênh bán hàng 0 ban tay quay || 1 ban giao hang
     private Integer paymentStatus; // trạng thái thanh toán 0 chua thanh toan || 1 da thanh toan
     private Integer orderStatus; // trạng thái đơn hàng 0 xác nhận đơn hàng || 1 chờ đơn vị vận chuyển || 2 dang giao hang || 3 da giao hang
-
     private String createName; // người tạo
-    private String updateName; // người sửa
+    private String payer; // người thanh toán
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @JsonIgnore
     @OneToMany(mappedBy = "bill")

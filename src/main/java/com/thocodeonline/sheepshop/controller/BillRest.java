@@ -1,7 +1,7 @@
 package com.thocodeonline.sheepshop.controller;
 
 import com.thocodeonline.sheepshop.entity.Bill;
-import com.thocodeonline.sheepshop.request.BillReq;
+import com.thocodeonline.sheepshop.request.BillRequest;
 import com.thocodeonline.sheepshop.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class BillRest {
     private BillService billService;
 
     @GetMapping()
-    public ResponseEntity<List<BillReq>> getAllBillTaiQuay() {
+    public ResponseEntity<List<BillRequest>> getAllBillTaiQuay() {
         // Lấy danh sách bill từ service
         List<Bill> bills = billService.getAllBillTayQuay();
 
@@ -30,29 +30,29 @@ public class BillRest {
         }
 
         // Chuyển đổi danh sách bill sang danh sách billReqs
-        List<BillReq> billReqs = bills.stream()
+        List<BillRequest> billRequests = bills.stream()
                 .map(bill -> {
-                    BillReq billReq = new BillReq();
-                    billReq.setId(bill.getId()); // Lấy id từ bill
-                    billReq.setCode(bill.getCode()); // Lấy code từ bill
-                    billReq.setPaymentStatus(bill.getPaymentStatus()); // Lấy paymentStatus từ bill
-                    billReq.setSalesChannel(bill.getSalesChannel()); // Lấy salesChannel từ bill
+                    BillRequest billRequest = new BillRequest();
+                    billRequest.setId(bill.getId()); // Lấy id từ bill
+                    billRequest.setCode(bill.getCode()); // Lấy code từ bill
+                    billRequest.setPaymentStatus(bill.getPaymentStatus()); // Lấy paymentStatus từ bill
+                    billRequest.setSalesChannel(bill.getSalesChannel()); // Lấy salesChannel từ bill
 
-                    return billReq; // Trả về đối tượng đã tạo
+                    return billRequest; // Trả về đối tượng đã tạo
                 })
                 .collect(Collectors.toList()); // Thu thập kết quả vào danh sách
 
-        return ResponseEntity.ok(billReqs); // Trả về 200 và danh sách
+        return ResponseEntity.ok(billRequests); // Trả về 200 và danh sách
     }
 
     @PostMapping()
-    public ResponseEntity<Bill> createBillTaiQiay(@RequestBody BillReq billReq) {
+    public ResponseEntity<Bill> createBillTaiQiay(@RequestBody BillRequest billRequest) {
         // Kiểm tra tính hợp lệ
-        if (billReq == null) {
+        if (billRequest == null) {
             return ResponseEntity.badRequest().build();
         }
         try {
-            Bill createdBill = billService.createBillTaiQiay(billReq);
+            Bill createdBill = billService.createBillTaiQiay(billRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdBill);
         } catch (Exception e) {
             // Xử lý lỗi phù hợp (có thể ghi log hoặc trả về thông báo cụ thể hơn)
@@ -61,7 +61,7 @@ public class BillRest {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Bill> updatePayBillTaiQuay(@PathVariable Long id, @RequestBody BillReq request) {
+    public ResponseEntity<Bill> updatePayBillTaiQuay(@PathVariable Long id, @RequestBody BillRequest request) {
         try {
             Bill updatePayBillTaiQiay = billService.updatePayBillTaiQuay(id, request);
             return ResponseEntity.ok(updatePayBillTaiQiay); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật

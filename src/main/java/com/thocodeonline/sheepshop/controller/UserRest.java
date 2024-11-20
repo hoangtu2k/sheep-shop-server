@@ -1,7 +1,7 @@
 package com.thocodeonline.sheepshop.controller;
 
 import com.thocodeonline.sheepshop.entity.User;
-import com.thocodeonline.sheepshop.request.UserReq;
+import com.thocodeonline.sheepshop.request.UserRequest;
 import com.thocodeonline.sheepshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,43 +19,43 @@ public class UserRest {
     private UserService userService;
 
     @GetMapping()
-    public ResponseEntity<List<UserReq>> getAll() {
+    public ResponseEntity<List<UserRequest>> getAll() {
         // Lấy danh sách User từ service
         List<User> users = userService.getAllUser();
 
         // Chuyển đổi danh sách User sang danh sách UserReq trực tiếp
-        List<UserReq> userReqs = users.stream()
+        List<UserRequest> userRequests = users.stream()
                 .map(user -> {
-                    UserReq userReq = new UserReq();
-                    userReq.setId(user.getId());
-                    userReq.setCode(user.getCode());
-                    userReq.setName(user.getName());
-                    userReq.setPhone(user.getPhone());
-                    userReq.setEmail(user.getEmail());
-                    userReq.setDateOfBirth(user.getDateOfBirth());
-                    userReq.setGender(user.getGender());
-                    userReq.setStatus(user.getStatus());
+                    UserRequest userRequest = new UserRequest();
+                    userRequest.setId(user.getId());
+                    userRequest.setCode(user.getCode());
+                    userRequest.setName(user.getName());
+                    userRequest.setPhone(user.getPhone());
+                    userRequest.setEmail(user.getEmail());
+                    userRequest.setDateOfBirth(user.getDateOfBirth());
+                    userRequest.setGender(user.getGender());
+                    userRequest.setStatus(user.getStatus());
 
-                    userReq.setImage(user.getImage());
+                    userRequest.setImage(user.getImage());
 
                     // Kiểm tra xem tài khoản và vai trò có tồn tại không
                     if (user.getAccount() != null && user.getAccount().getRole() != null) {
-                        userReq.setRoleName(user.getAccount().getRole().getName());
-                        userReq.setUsername(user.getAccount().getUsername());
+                        userRequest.setRoleName(user.getAccount().getRole().getName());
+                        userRequest.setUsername(user.getAccount().getUsername());
                     } else {
-                        userReq.setRoleName(null); // Đặt là null nếu không có vai trò
-                        userReq.setUsername(null);
+                        userRequest.setRoleName(null); // Đặt là null nếu không có vai trò
+                        userRequest.setUsername(null);
 
                     }
 
-                    return userReq; // Trả về đối tượng UserReq đã tạo
+                    return userRequest; // Trả về đối tượng UserReq đã tạo
                 })
                 .collect(Collectors.toList()); // Thu thập kết quả vào danh sách
 
-        if (userReqs.isEmpty()) {
+        if (userRequests.isEmpty()) {
             return ResponseEntity.noContent().build(); // Trả về 204 nếu không có người dùng
         }
-        return ResponseEntity.ok(userReqs); // Trả về 200 và danh sách người dùng
+        return ResponseEntity.ok(userRequests); // Trả về 200 và danh sách người dùng
     }
 
     @GetMapping("/{id}")
@@ -72,14 +72,14 @@ public class UserRest {
     }
 
     @PostMapping()
-    public ResponseEntity<User> createUser(@RequestBody UserReq userReq) {
+    public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest) {
         // Kiểm tra tính hợp lệ của userReq
-        if (userReq == null) {
+        if (userRequest == null) {
             return ResponseEntity.badRequest().build();
         }
 
         try {
-            User createdUser = userService.createUser(userReq);
+            User createdUser = userService.createUser(userRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
         } catch (Exception e) {
             // Xử lý lỗi phù hợp (có thể ghi log hoặc trả về thông báo cụ thể hơn)
@@ -88,8 +88,8 @@ public class UserRest {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserReq userReq) {
-        User updatedUser = userService.updateUser(id, userReq);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+        User updatedUser = userService.updateUser(id, userRequest);
         return ResponseEntity.ok(updatedUser); // Trả về 200 OK và đối tượng UserReq đã cập nhật
     }
 

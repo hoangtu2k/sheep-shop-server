@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Setter @Getter
-public class ProductReq {
+public class ProductRequest {
     private Long id;
     private String code;
     private String barcode;

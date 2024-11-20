@@ -5,7 +5,7 @@ import com.thocodeonline.sheepshop.entity.InvoiceDetails;
 import com.thocodeonline.sheepshop.entity.User;
 import com.thocodeonline.sheepshop.repository.BillRepository;
 import com.thocodeonline.sheepshop.repository.InvoiceDetailsRepository;
-import com.thocodeonline.sheepshop.request.BillReq;
+import com.thocodeonline.sheepshop.request.BillRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,24 +26,24 @@ public class BillService {
         return billRepository.getAllBillTaiQuay();
     }
 
-    public Bill createBillTaiQiay(BillReq billReq){
+    public Bill createBillTaiQiay(BillRequest billRequest){
         Bill bill = new Bill();
         bill.setCode(generateUserCode());
         bill.setPaymentStatus(0);
         bill.setSalesChannel(0);
 
-        bill.setCreateName(billReq.getCreateName());
-        bill.setUser(User.builder().id(billReq.getUserId()).build());
+        bill.setCreateName(billRequest.getCreateName());
+        bill.setUser(User.builder().id(billRequest.getUserId()).build());
         return billRepository.save(bill);
     }
 
-    public Bill updatePayBillTaiQuay(Long id, BillReq billReq){
+    public Bill updatePayBillTaiQuay(Long id, BillRequest billRequest){
         Bill bill = billRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Hóa đơn không tồn tại với ID: " + id));
-        bill.setSalesChannel(billReq.getSalesChannel());
-        bill.setBuyerName(billReq.getBuyerName());
-        bill.setTotalAmount(billReq.getTotalAmount());
-        bill.setNote(billReq.getNote());
+        bill.setSalesChannel(billRequest.getSalesChannel());
+        bill.setBuyerName(billRequest.getBuyerName());
+        bill.setTotalAmount(billRequest.getTotalAmount());
+        bill.setNote(billRequest.getNote());
         bill.setPaymentStatus(1);
         return billRepository.save(bill);
     }

@@ -2,7 +2,7 @@ package com.thocodeonline.sheepshop.controller;
 
 import com.thocodeonline.sheepshop.entity.ProductDetails;
 import com.thocodeonline.sheepshop.entity.ProductPhoto;
-import com.thocodeonline.sheepshop.request.ProductReq;
+import com.thocodeonline.sheepshop.request.ProductRequest;
 import com.thocodeonline.sheepshop.service.ProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,58 +21,58 @@ public class ProductDetailRest {
     private ProductDetailService productDetailService;
 
     @GetMapping()
-    public ResponseEntity<List<ProductReq>> getAllProductDetails() {
+    public ResponseEntity<List<ProductRequest>> getAllProductDetails() {
         List<ProductDetails> productDetails = productDetailService.getAllProductDetails();
 
         // Convert the list of Product to ProductReq
-        List<ProductReq> productReqs = productDetails.stream()
+        List<ProductRequest> productRequests = productDetails.stream()
                 .map(productDetail -> {
-                    ProductReq productReq = new ProductReq();
-                    productReq.setId(productDetail.getId());
-                    productReq.setCode(productDetail.getProduct().getCode());
-                    productReq.setBarcode(productDetail.getProduct().getBarcode());
-                    productReq.setName(productDetail.getProduct().getName());
-                    productReq.setPrice(productDetail.getPrice());
-                    productReq.setDescription(productDetail.getProduct().getDescription());
-                    productReq.setStatus(productDetail.getProduct().getStatus());
-                    productReq.setWeight(productDetail.getProduct().getWeight());
-                    productReq.setQuantity(productDetail.getQuantity());
+                    ProductRequest productRequest = new ProductRequest();
+                    productRequest.setId(productDetail.getId());
+                    productRequest.setCode(productDetail.getProduct().getCode());
+                    productRequest.setBarcode(productDetail.getProduct().getBarcode());
+                    productRequest.setName(productDetail.getProduct().getName());
+                    productRequest.setPrice(productDetail.getPrice());
+                    productRequest.setDescription(productDetail.getProduct().getDescription());
+                    productRequest.setStatus(productDetail.getProduct().getStatus());
+                    productRequest.setWeight(productDetail.getProduct().getWeight());
+                    productRequest.setQuantity(productDetail.getQuantity());
 
 
                     // Set color details if available
                     if (productDetail.getColor() != null) {
-                        productReq.setColorId(productDetail.getColor().getId());
-                        productReq.setColorName(productDetail.getColor().getName());
+                        productRequest.setColorId(productDetail.getColor().getId());
+                        productRequest.setColorName(productDetail.getColor().getName());
                     } else {
-                        productReq.setColorId(null);
-                        productReq.setColorName(null);
+                        productRequest.setColorId(null);
+                        productRequest.setColorName(null);
                     }
 
                     // Set size details if available
                     if (productDetail.getSize() != null) {
-                        productReq.setSizeId(productDetail.getSize().getId());
-                        productReq.setSizeName(productDetail.getSize().getName());
+                        productRequest.setSizeId(productDetail.getSize().getId());
+                        productRequest.setSizeName(productDetail.getSize().getName());
                     } else {
-                        productReq.setSizeId(null);
-                        productReq.setSizeName(null);
+                        productRequest.setSizeId(null);
+                        productRequest.setSizeName(null);
                     }
 
                     // Set category details if available
                     if (productDetail.getProduct().getCategory() != null) {
-                        productReq.setCategoryId(productDetail.getProduct().getCategory().getId());
-                        productReq.setCategoryName(productDetail.getProduct().getCategory().getName());
+                        productRequest.setCategoryId(productDetail.getProduct().getCategory().getId());
+                        productRequest.setCategoryName(productDetail.getProduct().getCategory().getName());
                     } else {
-                        productReq.setCategoryId(null);
-                        productReq.setCategoryName(null);
+                        productRequest.setCategoryId(null);
+                        productRequest.setCategoryName(null);
                     }
 
                     // Set brand details if available
                     if (productDetail.getProduct().getBrand() != null) {
-                        productReq.setBrandId(productDetail.getProduct().getBrand().getId());
-                        productReq.setBrandName(productDetail.getProduct().getBrand().getName());
+                        productRequest.setBrandId(productDetail.getProduct().getBrand().getId());
+                        productRequest.setBrandName(productDetail.getProduct().getBrand().getName());
                     } else {
-                        productReq.setBrandId(null);
-                        productReq.setBrandName(null);
+                        productRequest.setBrandId(null);
+                        productRequest.setBrandName(null);
                     }
 
                     // Set main image and image URL
@@ -83,11 +83,11 @@ public class ProductDetailRest {
                                 .orElse(null);
 
                         if (mainPhoto != null) {
-                            productReq.setMainImage(true);
-                            productReq.setImageUrl(mainPhoto.getImageUrl());
+                            productRequest.setMainImage(true);
+                            productRequest.setImageUrl(mainPhoto.getImageUrl());
                         } else {
-                            productReq.setMainImage(false);
-                            productReq.setImageUrl(null);
+                            productRequest.setMainImage(false);
+                            productRequest.setImageUrl(null);
                         }
 
                         // Collect non-main image URLs
@@ -96,22 +96,22 @@ public class ProductDetailRest {
                                 .map(ProductPhoto::getImageUrl) // Assuming getImageUrl() exists
                                 .collect(Collectors.toList());
 
-                        productReq.setNotMainImages(notMainImageUrls);
+                        productRequest.setNotMainImages(notMainImageUrls);
                     } else {
-                        productReq.setMainImage(false);
-                        productReq.setImageUrl(null); // No photos available
-                        productReq.setNotMainImages(new ArrayList<>()); // Ensure empty list
+                        productRequest.setMainImage(false);
+                        productRequest.setImageUrl(null); // No photos available
+                        productRequest.setNotMainImages(new ArrayList<>()); // Ensure empty list
                     }
 
-                    return productReq;
+                    return productRequest;
                 })
                 .collect(Collectors.toList());
 
         // Return response based on the presence of productReqs
-        if (productReqs.isEmpty()) {
+        if (productRequests.isEmpty()) {
             return ResponseEntity.noContent().build(); // Return 204 if no products
         }
-        return ResponseEntity.ok(productReqs); // Return 200 and the list of products
+        return ResponseEntity.ok(productRequests); // Return 200 and the list of products
     }
 
     @GetMapping("/{id}")
@@ -127,9 +127,9 @@ public class ProductDetailRest {
     }
 
     @PutMapping("/update-quantity/increase/{id}")
-    public ResponseEntity<ProductDetails> updateProductDetailreduceQuantityService(@PathVariable Long id ,@RequestBody ProductReq productReq) {
+    public ResponseEntity<ProductDetails> updateProductDetailreduceQuantityService(@PathVariable Long id ,@RequestBody ProductRequest productRequest) {
         try {
-            ProductDetails updatedProductdetails = productDetailService.updateProductDetailreduceQuantityService(id, productReq);
+            ProductDetails updatedProductdetails = productDetailService.updateProductDetailreduceQuantityService(id, productRequest);
             return ResponseEntity.ok(updatedProductdetails); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm
@@ -138,9 +138,9 @@ public class ProductDetailRest {
     }
 
     @PutMapping("/update-quantity/reduce/{id}")
-    public ResponseEntity<ProductDetails> updateProductDetailincreaseQuantityService(@PathVariable Long id ,@RequestBody ProductReq productReq) {
+    public ResponseEntity<ProductDetails> updateProductDetailincreaseQuantityService(@PathVariable Long id ,@RequestBody ProductRequest productRequest) {
         try {
-            ProductDetails updatedProductdetails = productDetailService.updateProductDetailincreaseQuantityService(id, productReq);
+            ProductDetails updatedProductdetails = productDetailService.updateProductDetailincreaseQuantityService(id, productRequest);
             return ResponseEntity.ok(updatedProductdetails); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm
@@ -149,9 +149,9 @@ public class ProductDetailRest {
     }
 
     @PutMapping("/delete-productdetail-update-quantity/{id}")
-    public ResponseEntity<ProductDetails> deleteProductDetailUpdateQuantity(@PathVariable Long id ,@RequestBody ProductReq productReq) {
+    public ResponseEntity<ProductDetails> deleteProductDetailUpdateQuantity(@PathVariable Long id ,@RequestBody ProductRequest productRequest) {
         try {
-            ProductDetails updatedProductdetails = productDetailService.deleteProductDetailUpdateQuantity(id, productReq);
+            ProductDetails updatedProductdetails = productDetailService.deleteProductDetailUpdateQuantity(id, productRequest);
             return ResponseEntity.ok(updatedProductdetails); // Trả về 200 OK và đối tượng sản phẩm đã cập nhật
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về 404 Not Found nếu không tìm thấy sản phẩm

@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,14 +45,17 @@ public class BillService {
         bill.setTotalAmount(billRequest.getTotalAmount());
         bill.setNote(billRequest.getNote());
         bill.setFormOfPayment(billRequest.getFormOfPayment());
-        bill.setBuyerName(billRequest.getBuyerName());
+        bill.setPayer(bill.getPayer());
+        bill.setDeliveryAddress(billRequest.getDeliveryAddress());
+        bill.setDeliveryDate(new Date());
+        bill.setConsignee(billRequest.getConsignee());
+        bill.setPhoneNumber(billRequest.getPhoneNumber());
+        bill.setOrderStatus(billRequest.getOrderStatus());
         if (billRequest.getCustomerId() != null) {
             bill.setCustomer(Customer.builder().id(billRequest.getCustomerId()).build());
         } else {
             bill.setCustomer(null);
         }
-
-        bill.setPayer(bill.getPayer());
         bill.setPaymentStatus(1);
         return billRepository.save(bill);
     }

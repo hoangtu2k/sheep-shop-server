@@ -22,7 +22,6 @@ public class BillRequest {
     private Integer orderStatus; // trạng thái đơn hàng 0 xác nhận đơn hàng || 1 chờ đơn vị vận chuyển || 2 dang giao hang || 3 da giao hang
     private String createName; // người tạo
     private String payer; // người thanh toán
-
     private Long userId;
     private Long customerId;
     private String customerName;

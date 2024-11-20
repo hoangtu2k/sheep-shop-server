@@ -1,6 +1,7 @@
 package com.thocodeonline.sheepshop.service;
 
 import com.thocodeonline.sheepshop.entity.Bill;
+import com.thocodeonline.sheepshop.entity.Customer;
 import com.thocodeonline.sheepshop.entity.InvoiceDetails;
 import com.thocodeonline.sheepshop.entity.User;
 import com.thocodeonline.sheepshop.repository.BillRepository;
@@ -44,6 +45,9 @@ public class BillService {
         bill.setBuyerName(billRequest.getBuyerName());
         bill.setTotalAmount(billRequest.getTotalAmount());
         bill.setNote(billRequest.getNote());
+        bill.setBuyerName(billRequest.getBuyerName());
+        bill.setCustomer(Customer.builder().id(billRequest.getCustomerId()).build());
+        bill.setPayer(bill.getPayer());
         bill.setPaymentStatus(1);
         return billRepository.save(bill);
     }

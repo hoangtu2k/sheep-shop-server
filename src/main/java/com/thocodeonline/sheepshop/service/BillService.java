@@ -31,8 +31,6 @@ public class BillService {
         Bill bill = new Bill();
         bill.setCode(generateUserCode());
         bill.setPaymentStatus(0);
-        bill.setSalesChannel(0);
-
         bill.setCreateName(billRequest.getCreateName());
         bill.setUser(User.builder().id(billRequest.getUserId()).build());
         return billRepository.save(bill);
@@ -45,6 +43,7 @@ public class BillService {
         bill.setBuyerName(billRequest.getBuyerName());
         bill.setTotalAmount(billRequest.getTotalAmount());
         bill.setNote(billRequest.getNote());
+        bill.setFormOfPayment(billRequest.getFormOfPayment());
         bill.setBuyerName(billRequest.getBuyerName());
         bill.setCustomer(Customer.builder().id(billRequest.getCustomerId()).build());
         bill.setPayer(bill.getPayer());

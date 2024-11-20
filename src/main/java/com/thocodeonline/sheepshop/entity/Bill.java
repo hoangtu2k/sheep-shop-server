@@ -27,6 +27,7 @@ public class Bill {
     private String phoneNumber; // số người nhận
     private BigDecimal totalAmount; // tổng tiền hàng
     private String note; // ghi chú
+    private Integer formOfPayment; // hình thức thanh toán 0 tiền mặt 1 chuyển khoản
     private Integer salesChannel; // kênh bán hàng 0 ban tay quay || 1 ban giao hang
     private Integer paymentStatus; // trạng thái thanh toán 0 chua thanh toan || 1 da thanh toan
     private Integer orderStatus; // trạng thái đơn hàng 0 xác nhận đơn hàng || 1 chờ đơn vị vận chuyển || 2 dang giao hang || 3 da giao hang
